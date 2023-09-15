@@ -25,4 +25,10 @@ class StringCalculatorTest {
         Assertions.assertEquals(20, actual);
     }
 
+    @Test
+    void addFiveNumbersSeparatedWithComma() {
+        int actual = calculator.add("6,14,920,57,3");
+        Assertions.assertEquals(1000, actual);
+    }
+
 }
