@@ -71,4 +71,10 @@ class StringCalculatorTest {
                 () -> "Exception message doesn't match expected one");
     }
 
+    @Test
+    void numbersGreaterThanThousandShouldBeenIgnored() {
+        int actual = calculator.add("1000,1001,999");
+        Assertions.assertEquals(1999, actual);
+    }
+
 }

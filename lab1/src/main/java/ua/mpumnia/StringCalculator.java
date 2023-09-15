@@ -24,12 +24,7 @@ public class StringCalculator {
 
         checkForNegativeNumbers(nums);
 
-        int sum = 0;
-        for (String num : nums) {
-            sum += Integer.parseInt(num);
-        }
-
-        return sum;
+        return sumUpNumbersLessOrEqualToThreshold(nums, 1000);
     }
     private String ridOfDelimiters(String expression) {
         // Support one custom delimiter
@@ -56,6 +51,17 @@ public class StringCalculator {
             throw new IllegalArgumentException("Unsupported negative numbers. %s were passed"
                             .formatted(negativeNumbers.toString()));
         }
+    }
+
+    private int sumUpNumbersLessOrEqualToThreshold(String[] numbers, int threshold) {
+        int sum = 0;
+        for (String number : numbers) {
+            int num = Integer.parseInt(number);
+            if (num <= threshold) {
+                sum += num;
+            }
+        }
+        return sum;
     }
 
 }
