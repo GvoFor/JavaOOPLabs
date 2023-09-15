@@ -8,11 +8,15 @@ public class StringCalculator {
             return 0;
         }
 
-        numbers = numbers.replace('\n', ',');
+        // Replace each delimiter with comma
+        // and cut off delimiters definition part
+        numbers = ridOfDelimiters(numbers);
+
         if (numbers.contains(",,")) {
             throw new IllegalArgumentException("There are two delimiters following one by another");
         }
 
+        // Here we have just comma separated numbers
         String[] nums = numbers.split(",");
 
         int sum = 0;
@@ -21,6 +25,17 @@ public class StringCalculator {
         }
 
         return sum;
+    }
+    private String ridOfDelimiters(String expression) {
+        // Support one custom delimiter
+        if (expression.startsWith("//")) {
+            char customDelimiter = expression.charAt(2);
+            return expression.replace('\n', ',')
+                    .replace(customDelimiter, ',')
+                    .substring(4);
+        }
+
+        return expression.replace('\n', ',');
     }
 
 }

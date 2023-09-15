@@ -48,4 +48,16 @@ class StringCalculatorTest {
                 () -> "Exception message doesn't match expected one");
     }
 
+    @Test
+    void testCustomDelimiter() {
+        int actual = calculator.add("//;\n5;3");
+        Assertions.assertEquals(8, actual);
+    }
+
+    @Test
+    void testCustomDelimiterWithDefaultDelimiters() {
+        int actual = calculator.add("//+\n5+3,9\n1+2");
+        Assertions.assertEquals(20, actual);
+    }
+
 }
