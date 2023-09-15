@@ -60,4 +60,15 @@ class StringCalculatorTest {
         Assertions.assertEquals(20, actual);
     }
 
+    @Test
+    void throwIllegalArgumentExceptionIfSomeNumberIsNegative() {
+        Exception e = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.add("-10,5,24,-3,6,-7"));
+        Assertions.assertEquals(
+                "Unsupported negative numbers. [-10, -3, -7] were passed",
+                e.getMessage(),
+                () -> "Exception message doesn't match expected one");
+    }
+
 }
