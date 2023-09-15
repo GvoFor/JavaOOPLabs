@@ -31,4 +31,21 @@ class StringCalculatorTest {
         Assertions.assertEquals(1000, actual);
     }
 
+    @Test
+    void addThreeNumbersSeparatedWithCommaAndLinebreaker() {
+        int actual = calculator.add("4,18\n5");
+        Assertions.assertEquals(27, actual);
+    }
+
+    @Test
+    void throwIllegalArgumentExceptionIfDelimiterFollowByAnotherDelimiter() {
+        Exception e = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.add("4,18\n,5"));
+        Assertions.assertEquals(
+                "There are two delimiters following one by another",
+                e.getMessage(),
+                () -> "Exception message doesn't match expected one");
+    }
+
 }
