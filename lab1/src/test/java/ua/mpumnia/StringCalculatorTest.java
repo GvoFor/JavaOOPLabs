@@ -77,4 +77,21 @@ class StringCalculatorTest {
         Assertions.assertEquals(1999, actual);
     }
 
+    @Test
+    void testCustomDelimiterThatConsistOfThreeCharacters() {
+        int actual = calculator.add("//[***]\n5***3***6");
+        Assertions.assertEquals(14, actual);
+    }
+
+    @Test
+    void throwIllegalArgumentExceptionIfDelimiterFollowByAnotherDelimiterAndSomeOfThemIsCustom() {
+        Exception e = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.add("//[++]\n4++18,5++4++,2"));
+        Assertions.assertEquals(
+                "There are two delimiters following one by another",
+                e.getMessage(),
+                () -> "Exception message doesn't match expected one");
+    }
+
 }

@@ -29,10 +29,21 @@ public class StringCalculator {
     private String ridOfDelimiters(String expression) {
         // Support one custom delimiter
         if (expression.startsWith("//")) {
-            char customDelimiter = expression.charAt(2);
-            return expression.replace('\n', ',')
-                    .replace(customDelimiter, ',')
-                    .substring(4);
+            // Custom delimiter that consist of 1 char
+            // Syntax is "//d\n" where 'd' is our delimiter
+            if (expression.charAt(3) == '\n') {
+                char customDelimiter = expression.charAt(2);
+                return expression.substring(4)
+                        .replace('\n', ',')
+                        .replace(customDelimiter, ',');
+            }
+            // Custom delimiter that consist of more than 1 char
+            // Syntax is "//[del]\n" where "del" is our delimiter
+            int delimiterEndIndex = expression.indexOf("]\n");
+            String customDelimiter = expression.substring(3, delimiterEndIndex);
+            return expression.substring(delimiterEndIndex + 2)
+                    .replace('\n', ',')
+                    .replace(customDelimiter, ",");
         }
 
         return expression.replace('\n', ',');
