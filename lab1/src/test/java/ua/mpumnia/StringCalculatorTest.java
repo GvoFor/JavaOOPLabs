@@ -99,4 +99,16 @@ class StringCalculatorTest {
         int actual = calculator.add("//[*][+][%]\n1+3%5*7");
         Assertions.assertEquals(16, actual);
     }
+
+    @Test
+    void testThreeCustomDelimitersWithDifferentLength() {
+        int actual = calculator.add("//[**][***][*]\n1*1***1**2");
+        Assertions.assertEquals(5, actual);
+    }
+
+    @Test
+    void testTwoCustomDelimitersWithDifferentLengthWithDefaultDelimiters() {
+        int actual = calculator.add("//[+][ab]\n2+2ab2,2\n2ab2");
+        Assertions.assertEquals(12, actual);
+    }
 }
