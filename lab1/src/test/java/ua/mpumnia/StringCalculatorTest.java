@@ -94,4 +94,9 @@ class StringCalculatorTest {
                 () -> "Exception message doesn't match expected one");
     }
 
+    @Test
+    void testThreeCustomDelimitersEachConsistsOfOneCharacter() {
+        int actual = calculator.add("//[*][+][%]\n1+3%5*7");
+        Assertions.assertEquals(16, actual);
+    }
 }

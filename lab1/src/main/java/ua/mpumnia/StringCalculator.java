@@ -1,7 +1,6 @@
 package ua.mpumnia;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class StringCalculator {
 
@@ -27,9 +26,9 @@ public class StringCalculator {
         return sumUpNumbersLessOrEqualToThreshold(nums, 1000);
     }
     private String ridOfDelimiters(String expression) {
-        // Support one custom delimiter
+        // Support custom delimiters
         if (expression.startsWith("//")) {
-            // Custom delimiter that consist of 1 char
+            // Custom delimiter that consists of 1 char
             // Syntax is "//d\n" where 'd' is our delimiter
             if (expression.charAt(3) == '\n') {
                 char customDelimiter = expression.charAt(2);
@@ -37,16 +36,35 @@ public class StringCalculator {
                         .replace('\n', ',')
                         .replace(customDelimiter, ',');
             }
-            // Custom delimiter that consist of more than 1 char
-            // Syntax is "//[del]\n" where "del" is our delimiter
-            int delimiterEndIndex = expression.indexOf("]\n");
-            String customDelimiter = expression.substring(3, delimiterEndIndex);
-            return expression.substring(delimiterEndIndex + 2)
-                    .replace('\n', ',')
-                    .replace(customDelimiter, ",");
+            // Custom delimiters that consist of more than 1 char
+            // Syntax is "//[del1][del2]...[deln]\n" where
+            // "del1", "del2", ..., "deln" are our delimiter
+            Set<String> customDelimiters = extractDelimitersSet(expression);
+            customDelimiters.add("\n");
+
+            int delimitersEndIndex = expression.indexOf("]\n");
+            expression = expression.substring(delimitersEndIndex + 2);
+
+            for (String delimiter : customDelimiters) {
+                expression = expression.replace(delimiter, ",");
+            }
+
+            return expression;
         }
 
         return expression.replace('\n', ',');
+    }
+
+    private Set<String> extractDelimitersSet(String expression) {
+        Set<String> delimiters = new TreeSet<>(Comparator.reverseOrder());
+        int delimiterEndIndex = expression.indexOf("]\n");
+        String[] customDelimiters = expression.substring(3, delimiterEndIndex).split("]\\[");
+        for (String delimiter : customDelimiters) {
+            if (delimiter.length() != 0) {
+                delimiters.add(delimiter);
+            }
+        }
+        return delimiters;
     }
 
     private void checkForNegativeNumbers(String[] numbers) throws IllegalArgumentException {
