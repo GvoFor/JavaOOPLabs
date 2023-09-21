@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import javax.management.ConstructorParameters;
-
 class StringCalculatorTest {
 
     private static final StringCalculator calculator = new StringCalculator();
@@ -42,9 +40,9 @@ class StringCalculatorTest {
     }
 
     @Test
-    void throwIllegalArgumentExceptionIfDelimiterFollowByAnotherDelimiter() {
+    void throwStringCalculatorIllegalArgumentExceptionIfDelimiterFollowByAnotherDelimiter() {
         Exception e = Assertions.assertThrows(
-                IllegalArgumentException.class,
+                StringCalculatorIllegalArgumentException.class,
                 () -> calculator.add("4,18\n,5"));
         Assertions.assertEquals(
                 "There are two delimiters following one by another",
@@ -65,12 +63,12 @@ class StringCalculatorTest {
     }
 
     @Test
-    void throwIllegalArgumentExceptionIfSomeNumberIsNegative() {
+    void throwStringCalculatorIllegalArgumentExceptionIfSomeNumberIsNegative() {
         Exception e = Assertions.assertThrows(
-                IllegalArgumentException.class,
+                StringCalculatorIllegalArgumentException.class,
                 () -> calculator.add("-10,5,24,-3,6,-7"));
         Assertions.assertEquals(
-                "Unsupported negative numbers. [-10, -3, -7] were passed",
+                "Negative numbers are not supported. [-10, -3, -7] were passed",
                 e.getMessage(),
                 () -> "Exception message doesn't match expected one");
     }
@@ -88,9 +86,9 @@ class StringCalculatorTest {
     }
 
     @Test
-    void throwIllegalArgumentExceptionIfDelimiterFollowByAnotherDelimiterAndSomeOfThemIsCustom() {
+    void throwStringCalculatorIllegalArgumentExceptionIfDelimiterFollowByAnotherDelimiterAndSomeOfThemIsCustom() {
         Exception e = Assertions.assertThrows(
-                IllegalArgumentException.class,
+                StringCalculatorIllegalArgumentException.class,
                 () -> calculator.add("//[++]\n4++18,5++4++,2"));
         Assertions.assertEquals(
                 "There are two delimiters following one by another",
@@ -117,9 +115,9 @@ class StringCalculatorTest {
     }
 
     @Test
-    void throwIllegalArgumentExceptionIfExpressionIsNull() {
+    void throwStringCalculatorIllegalArgumentExceptionIfExpressionIsNull() {
         Exception e = Assertions.assertThrows(
-                IllegalArgumentException.class,
+                StringCalculatorIllegalArgumentException.class,
                 () -> calculator.add(null));
         Assertions.assertEquals(
                 "Null was passed",
@@ -133,9 +131,9 @@ class StringCalculatorTest {
                             "//[++][\n1,2",
                             "//][h]\n1,2",
                             "//[][%]\n1,2"})
-    void throwIllegalArgumentExceptionIfDelimiterDefinitionIsIncorrect(String expression) {
+    void throwStringCalculatorIllegalArgumentExceptionIfDelimiterDefinitionIsIncorrect(String expression) {
         Exception e = Assertions.assertThrows(
-                IllegalArgumentException.class,
+                StringCalculatorIllegalArgumentException.class,
                 () -> calculator.add(expression));
         Assertions.assertEquals(
                 "Delimiters definition is incorrect",
@@ -144,9 +142,9 @@ class StringCalculatorTest {
     }
 
     @Test
-    void throwIllegalArgumentExceptionIfExpressionStartsWithDelimiter() {
+    void throwStringCalculatorIllegalArgumentExceptionIfExpressionStartsWithDelimiter() {
         Exception e = Assertions.assertThrows(
-                IllegalArgumentException.class,
+                StringCalculatorIllegalArgumentException.class,
                 () -> calculator.add("//+\n+1,2"));
         Assertions.assertEquals(
                 "Expression starts with delimiter",
@@ -155,9 +153,9 @@ class StringCalculatorTest {
     }
 
     @Test
-    void throwIllegalArgumentExceptionIfExpressionEndsWithDelimiter() {
+    void throwStringCalculatorIllegalArgumentExceptionIfExpressionEndsWithDelimiter() {
         Exception e = Assertions.assertThrows(
-                IllegalArgumentException.class,
+                StringCalculatorIllegalArgumentException.class,
                 () -> calculator.add("//+\n1,2+"));
         Assertions.assertEquals(
                 "Expression ends with delimiter",
@@ -171,9 +169,9 @@ class StringCalculatorTest {
                             "1,2-,3,5",
                             "//+\n1,2+3a5",
                             "//[***][**]\n5****6**3***4"})
-    void throwIllegalArgumentExceptionIfExpressionContainsUndefinedDelimiter(String expression) {
+    void throwStringCalculatorIllegalArgumentExceptionIfExpressionContainsUndefinedDelimiter(String expression) {
         Exception e = Assertions.assertThrows(
-                IllegalArgumentException.class,
+                StringCalculatorIllegalArgumentException.class,
                 () -> calculator.add(expression));
         Assertions.assertEquals(
                 "Expression contains undefined delimiter",
