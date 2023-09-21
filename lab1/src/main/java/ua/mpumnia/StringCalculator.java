@@ -1,22 +1,30 @@
 package ua.mpumnia;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringCalculator {
 
+    private final Pattern DELIMITER_DEFINITION_PATTERN = Pattern.compile("^(//(.|(\\[[^\\]]+\\])+)\\n)?(.|\\s)+$");
+
     public int add(String numbers) throws IllegalArgumentException {
+
+        if (numbers == null) {
+            throw new IllegalArgumentException("Null was passed");
+        }
 
         if (numbers.length() == 0) {
             return 0;
         }
 
+        checkDelimitersDefinitionCorrectness(numbers);
+
         // Replace each delimiter with comma
         // and cut off delimiters definition part
         numbers = ridOfDelimiters(numbers);
 
-        if (numbers.contains(",,")) {
-            throw new IllegalArgumentException("There are two delimiters following one by another");
-        }
+        checkExpressionCorrectness(numbers);
 
         // Here we have just comma separated numbers
         String[] nums = numbers.split(",");
@@ -65,6 +73,38 @@ public class StringCalculator {
             }
         }
         return delimiters;
+    }
+
+    private void checkDelimitersDefinitionCorrectness(String expression) throws IllegalArgumentException {
+        if (!expression.startsWith("/")) {
+            return;
+        }
+
+        Matcher matcher = DELIMITER_DEFINITION_PATTERN.matcher(expression);
+        matcher.matches();
+
+        boolean isCorrect = (matcher.group(1) != null);
+        if (!isCorrect) {
+            throw new IllegalArgumentException("Delimiters definition is incorrect");
+        }
+    }
+
+    private void checkExpressionCorrectness(String expression) throws IllegalArgumentException {
+        if (expression.startsWith(",")) {
+            throw new IllegalArgumentException("Expression starts with delimiter");
+        }
+
+        if (expression.endsWith(",")) {
+            throw new IllegalArgumentException("Expression ends with delimiter");
+        }
+
+        if (expression.contains(",,")) {
+            throw new IllegalArgumentException("There are two delimiters following one by another");
+        }
+
+        if (!expression.matches("^(-?\\d+,?)+$")) {
+            throw new IllegalArgumentException("Expression contains undefined delimiter");
+        }
     }
 
     private void checkForNegativeNumbers(String[] numbers) throws IllegalArgumentException {

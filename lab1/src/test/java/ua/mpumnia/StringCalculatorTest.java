@@ -2,6 +2,10 @@ package ua.mpumnia;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import javax.management.ConstructorParameters;
 
 class StringCalculatorTest {
 
@@ -110,5 +114,70 @@ class StringCalculatorTest {
     void testTwoCustomDelimitersWithDifferentLengthWithDefaultDelimiters() {
         int actual = calculator.add("//[+][ab]\n2+2ab2,2\n2ab2");
         Assertions.assertEquals(12, actual);
+    }
+
+    @Test
+    void throwIllegalArgumentExceptionIfExpressionIsNull() {
+        Exception e = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.add(null));
+        Assertions.assertEquals(
+                "Null was passed",
+                e.getMessage(),
+                () -> "Exception message doesn't match expected one");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"/+\n1,2",
+                            "//abc\n1,2",
+                            "//[++][\n1,2",
+                            "//][h]\n1,2",
+                            "//[][%]\n1,2"})
+    void throwIllegalArgumentExceptionIfDelimiterDefinitionIsIncorrect(String expression) {
+        Exception e = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.add(expression));
+        Assertions.assertEquals(
+                "Delimiters definition is incorrect",
+                e.getMessage(),
+                () -> "Exception message doesn't match expected one");
+    }
+
+    @Test
+    void throwIllegalArgumentExceptionIfExpressionStartsWithDelimiter() {
+        Exception e = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.add("//+\n+1,2"));
+        Assertions.assertEquals(
+                "Expression starts with delimiter",
+                e.getMessage(),
+                () -> "Exception message doesn't match expected one");
+    }
+
+    @Test
+    void throwIllegalArgumentExceptionIfExpressionEndsWithDelimiter() {
+        Exception e = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.add("//+\n1,2+"));
+        Assertions.assertEquals(
+                "Expression ends with delimiter",
+                e.getMessage(),
+                () -> "Exception message doesn't match expected one");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1+2",
+                            "1,2,--3,5",
+                            "1,2-,3,5",
+                            "//+\n1,2+3a5",
+                            "//[***][**]\n5****6**3***4"})
+    void throwIllegalArgumentExceptionIfExpressionContainsUndefinedDelimiter(String expression) {
+        Exception e = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.add(expression));
+        Assertions.assertEquals(
+                "Expression contains undefined delimiter",
+                e.getMessage(),
+                () -> "Exception message doesn't match expected one");
     }
 }
