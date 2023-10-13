@@ -342,4 +342,64 @@ public class MatrixTest {
                 "MatrixIncompatibleDimensionException wasn't thrown");
     }
 
+    @Test
+    void testCreateDiagonal() {
+        Matrix diagonal = Matrix.createDiagonal(1, 2, 3, 4);
+        Matrix expected = new Matrix(4, 4);
+        expected.setValue(0, 0, 1);
+        expected.setValue(1, 1, 2);
+        expected.setValue(2, 2, 3);
+        expected.setValue(3, 3, 4);
+        assertEquals(expected, diagonal, "Incorrect diagonal matrix");
+    }
+
+    @Test
+    void testCreateIdentity() {
+        Matrix diagonal = Matrix.createIdentity(2, 4);
+        Matrix expected = new Matrix(2, 4);
+        expected.setRow(0, 1, 1, 1, 1);
+        expected.setRow(1, 1, 1, 1, 1);
+        assertEquals(expected, diagonal, "Incorrect identity matrix");
+    }
+
+    @Test
+    void testCreateIdentityWithNegativeDimensionShouldThrowMatrixIllegalDimensionException() {
+        assertThrows(MatrixIllegalDimensionException.class,
+                () -> Matrix.createIdentity(-4, 3),
+                "MatrixIllegalDimensionException wasn't thrown");
+    }
+
+    @Test
+    void testCreateRandomRow() {
+        Matrix row = Matrix.createRandomRow(4);
+        Matrix notExpected = new Matrix(1, 4);
+        assertEquals(new Dimension(1, 4), row.getDimension(), "Dimension mismatch");
+        assertNotEquals(notExpected, row, "Matrix isn't random");
+    }
+
+
+    @Test
+    void testCreateRandomRowWithNegativeDimensionShouldThrowMatrixIllegalDimensionException() {
+        assertThrows(MatrixIllegalDimensionException.class,
+                () -> Matrix.createRandomRow(-1),
+                "MatrixIllegalDimensionException wasn't thrown");
+    }
+
+
+    @Test
+    void testCreateRandomColumn() {
+        Matrix column = Matrix.createRandomColumn(3);
+        Matrix notExpected = new Matrix(3, 1);
+        assertEquals(new Dimension(3, 1), column.getDimension(), "Dimension mismatch");
+        assertNotEquals(notExpected, column, "Matrix isn't random");
+    }
+
+
+    @Test
+    void testCreateRandomColumnWithNegativeDimensionShouldThrowMatrixIllegalDimensionException() {
+        assertThrows(MatrixIllegalDimensionException.class,
+                () -> Matrix.createRandomColumn(-1),
+                "MatrixIllegalDimensionException wasn't thrown");
+    }
+
 }

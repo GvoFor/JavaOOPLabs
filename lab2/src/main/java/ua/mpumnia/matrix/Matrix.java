@@ -165,20 +165,46 @@ public class Matrix {
     }
 
     public static Matrix createDiagonal(double... diagonal) {
-        return null;
+        Matrix result = new Matrix(diagonal.length, diagonal.length);
+        for (int i = 0; i < diagonal.length; i++) {
+            result.values[i][i] = diagonal[i];
+        }
+        return result;
     }
 
     public static Matrix createIdentity(int rowsN, int columnsN) {
-        return null;
+        if (rowsN < 0 || columnsN < 0) {
+            throw new MatrixIllegalDimensionException();
+        }
+        Matrix result = new Matrix(rowsN, columnsN);
+        for (int rowI = 0; rowI < rowsN; rowI++) {
+            for (int columnI = 0; columnI < columnsN; columnI++) {
+                result.values[rowI][columnI] = 1;
+            }
+        }
+        return result;
     }
 
     public static Matrix createRandomRow(int columnsN) {
-        return null;
+        if (columnsN < 0) {
+            throw new MatrixIllegalDimensionException();
+        }
+        Matrix result = new Matrix(1, columnsN);
+        for (int columnI = 0; columnI < columnsN; columnI++) {
+            result.values[0][columnI] = Math.random();
+        }
+        return result;
     }
 
-
     public static Matrix createRandomColumn(int rowsN) {
-        return null;
+        if (rowsN < 0) {
+            throw new MatrixIllegalDimensionException();
+        }
+        Matrix result = new Matrix(rowsN, 1);
+        for (int rowI = 0; rowI < rowsN; rowI++) {
+            result.values[rowI][0] = Math.random();
+        }
+        return result;
     }
 
     @Override
