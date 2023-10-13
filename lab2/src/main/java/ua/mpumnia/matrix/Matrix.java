@@ -1,31 +1,46 @@
 package ua.mpumnia.matrix;
 
+import ua.mpumnia.matrix.exceptions.MatrixIllegalDimensionException;
+
 public class Matrix {
 
     private double[][] values;
 
     public Matrix() {
-
+        this(0, 0);
     }
 
     public Matrix(int rowsN, int columnsN) {
+        if (rowsN < 0 || columnsN < 0) {
+            throw new MatrixIllegalDimensionException(
+                    "Minimum dimension is 0x0, but %dx%d was passed"
+                            .formatted(rowsN, columnsN)
+            );
+        }
+        values = new double[rowsN][columnsN];
+    }
 
+    public Matrix(Dimension dimension) {
+        this(dimension.rowsN, dimension.columnsN);
     }
 
     public Matrix(Matrix matrix) {
 
     }
 
-    public int getRowsN() {
-        return 0;
+    private int getRowsN() {
+        return values.length;
     }
 
-    public int getColumnsN() {
-        return 0;
+    private int getColumnsN() {
+        if (getRowsN() == 0) {
+            return 0;
+        }
+        return values[0].length;
     }
 
     public Dimension getDimension() {
-        return null;
+        return new Dimension(getRowsN(), getColumnsN());
     }
 
     public double getValue(int rowI, int columnI) {
