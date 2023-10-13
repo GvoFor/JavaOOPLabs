@@ -112,11 +112,24 @@ public class Matrix {
     }
 
     public Matrix add(Matrix matrix) {
-        return null;
+        if (matrix.getRowsN() != getRowsN() || matrix.getColumnsN() != getColumnsN()) {
+            throw new MatrixIncompatibleDimensionException();
+        }
+        for (int rowI = 0; rowI < getRowsN(); rowI++) {
+            for (int columnI = 0; columnI < getColumnsN(); columnI++) {
+                values[rowI][columnI] += matrix.values[rowI][columnI];
+            }
+        }
+        return this;
     }
 
     public Matrix multiply(double scalar) {
-        return null;
+        for (int rowI = 0; rowI < getRowsN(); rowI++) {
+            for (int columnI = 0; columnI < getColumnsN(); columnI++) {
+                values[rowI][columnI] *= scalar;
+            }
+        }
+        return this;
     }
 
     public Matrix multiply(Matrix matrix) {

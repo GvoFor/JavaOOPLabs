@@ -244,4 +244,53 @@ public class MatrixTest {
         assertEquals(matrix, copy, () -> "Matrix wasn't copied");
     }
 
+    @Test
+    void addMatricesWithCompatibleDimensions() {
+        Matrix m1 = new Matrix(3, 3);
+        m1.setRow(0, 2, 4, 6);
+        m1.setRow(1, 1, 5, 9);
+        m1.setRow(2, 8, 3, 5);
+        Matrix m2 = new Matrix(3, 3);
+        m2.setRow(0, 1, 4, -3);
+        m2.setRow(1, 1, -4, 3);
+        m2.setRow(2, -1, 4, 3);
+        Matrix sum = m1.add(m2);
+        assertSame(sum, m1, () -> "Returned matrix is new object");
+        Matrix expected = new Matrix(3, 3);
+        expected.setRow(0, 3, 8, 3);
+        expected.setRow(1, 2, 1, 12);
+        expected.setRow(2, 7, 7, 8);
+        assertEquals(expected, sum, () -> "Incorrect matrix sum");
+    }
+
+    @Test
+    void addMatricesWithIncompatibleDimensionsShouldThrowMatrixIncompatibleDimensionException() {
+        Matrix m1 = new Matrix(3, 3);
+        m1.setRow(0, 2, 4, 6);
+        m1.setRow(1, 1, 5, 9);
+        m1.setRow(2, 8, 3, 5);
+        Matrix m2 = new Matrix(2, 3);
+        m2.setRow(0, 1, 4, -3);
+        m2.setRow(1, 1, -4, 3);
+        assertThrows(MatrixIncompatibleDimensionException.class,
+                () -> m1.add(m2),
+                () -> "MatrixIncompatibleDimensionException wasn't thrown");
+
+    }
+
+    @Test
+    void multiplyMatrixByScalar() {
+        Matrix m1 = new Matrix(3, 3);
+        m1.setRow(0, 2, 4, 6);
+        m1.setRow(1, 1, 5, 9);
+        m1.setRow(2, 8, 3, 5);
+        Matrix scaled = m1.multiply(2);
+        assertSame(scaled, m1, () -> "Returned matrix is new object");
+        Matrix expected = new Matrix(3, 3);
+        expected.setRow(0, 4, 8, 12);
+        expected.setRow(1, 2, 10, 18);
+        expected.setRow(2, 16, 6, 10);
+        assertEquals(expected, scaled, () -> "Incorrect matrix scalar multiplication");
+    }
+
 }
