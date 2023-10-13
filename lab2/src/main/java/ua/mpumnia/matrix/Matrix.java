@@ -1,6 +1,8 @@
 package ua.mpumnia.matrix;
 
 import ua.mpumnia.matrix.exceptions.MatrixIllegalDimensionException;
+import ua.mpumnia.matrix.exceptions.MatrixIncompatibleDimensionException;
+import ua.mpumnia.matrix.exceptions.MatrixOutOfBoundsException;
 
 public class Matrix {
 
@@ -44,35 +46,64 @@ public class Matrix {
     }
 
     public double getValue(int rowI, int columnI) {
-        return 0;
+        checkOutOfBounds(rowI, columnI);
+        return values[rowI][columnI];
     }
 
     public void setValue(int rowI, int columnI, double value) {
-
+        checkOutOfBounds(rowI, columnI);
+        values[rowI][columnI] = value;
     }
 
     public Matrix getRow(int rowI) {
-        return null;
+        checkOutOfBounds(rowI, 0);
+        Matrix row = new Matrix(1, getColumnsN());
+        System.arraycopy(values[rowI], 0, row.values[0], 0, getColumnsN());
+        return row;
     }
 
     public void setRow(int rowI, double... row) {
-
+        checkOutOfBounds(rowI, 0);
+        if (getColumnsN() != row.length) {
+            throw new MatrixIncompatibleDimensionException();
+        }
+        System.arraycopy(row, 0, values[rowI], 0, getColumnsN());
     }
 
     public void setRow(int rowI, Matrix rowMatrix) {
-
+        if (rowMatrix.getRowsN() != 1) {
+            throw new MatrixIncompatibleDimensionException();
+        }
+        setRow(rowI, rowMatrix.values[0]);
     }
 
     public Matrix getColumn(int columnI) {
-        return null;
+        checkOutOfBounds(0, columnI);
+        Matrix column = new Matrix(getRowsN(), 1);
+        for (int rowI = 0; rowI < getRowsN(); rowI++) {
+            column.values[rowI][0] = values[rowI][columnI];
+        }
+        return column;
     }
 
     public void setColumn(int columnI, double... column) {
-
+        checkOutOfBounds(0, columnI);
+        if (getRowsN() != column.length) {
+            throw new MatrixIncompatibleDimensionException();
+        }
+        for (int rowI = 0; rowI < getRowsN(); rowI++) {
+            values[rowI][columnI] = column[rowI];
+        }
     }
 
     public void setColumn(int columnI, Matrix columnMatrix) {
-
+        checkOutOfBounds(0, columnI);
+        if (getRowsN() != columnMatrix.getRowsN() || columnMatrix.getColumnsN() != 1) {
+            throw new MatrixIncompatibleDimensionException();
+        }
+        for (int rowI = 0; rowI < getRowsN(); rowI++) {
+            values[rowI][columnI] = columnMatrix.values[rowI][0];
+        }
     }
 
     public Matrix add(Matrix matrix) {
@@ -124,6 +155,13 @@ public class Matrix {
 
     public String toString() {
         return null;
+    }
+
+    private void checkOutOfBounds(int rowI, int columnI) {
+        if (rowI < 0 || rowI >= getRowsN() ||
+                columnI < 0 || columnI >= getColumnsN()) {
+            throw new MatrixOutOfBoundsException();
+        }
     }
 
 }
