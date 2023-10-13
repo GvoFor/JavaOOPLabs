@@ -293,4 +293,54 @@ public class MatrixTest {
         assertEquals(expected, scaled, () -> "Incorrect matrix scalar multiplication");
     }
 
+    @Test
+    void testTranspose() {
+        Matrix m1 = new Matrix(4, 3);
+        m1.setRow(0, 2, 4, 6);
+        m1.setRow(1, 1, 5, 9);
+        m1.setRow(2, 8, 3, 5);
+        m1.setRow(3, 6, 2, 1);
+        Matrix transposed = m1.transpose();
+        assertSame(transposed, m1, () -> "Returned matrix is new object");
+        Matrix expected = new Matrix(3, 4);
+        expected.setRow(0, 2, 1, 8, 6);
+        expected.setRow(1, 4, 5, 3, 2);
+        expected.setRow(2, 6, 9, 5, 1);
+        assertEquals(expected, transposed, () -> "Incorrect matrix transposition");
+    }
+
+    @Test
+    void multiplyMatricesWithCompatibleDimensions() {
+        Matrix m1 = new Matrix(3, 2);
+        m1.setRow(0, 1, 1);
+        m1.setRow(1, 0, 1);
+        m1.setRow(2, 1, 0);
+        Matrix m2 = new Matrix(2, 4);
+        m2.setRow(0, 0, 0, 1, 1);
+        m2.setRow(1, 1, 1, 0, 1);
+        Matrix product = m1.multiply(m2);
+        assertSame(product, m1, () -> "Returned matrix is new object");
+        Matrix expected = new Matrix(3, 4);
+        expected.setRow(0, 1, 1, 1, 2);
+        expected.setRow(1, 1, 1, 0, 1);
+        expected.setRow(2, 0, 0, 1, 1);
+        assertEquals(expected, product, () -> "Incorrect matrix multiplication");
+    }
+
+
+    @Test
+    void multiplyMatricesWithIncompatibleDimensionsShouldThrowMatrixIncompatibleDimensionException() {
+        Matrix m1 = new Matrix(3, 2);
+        m1.setRow(0, 1, 1);
+        m1.setRow(1, 0, 1);
+        m1.setRow(2, 1, 0);
+        Matrix m2 = new Matrix(3, 3);
+        m2.setRow(0, 0, 0, 1);
+        m2.setRow(1, 1, 1, 0);
+        m2.setRow(2, 0, 1, 0);
+        assertThrows(MatrixIncompatibleDimensionException.class,
+                () -> m1.multiply(m2),
+                () -> "MatrixIncompatibleDimensionException wasn't thrown");
+    }
+
 }

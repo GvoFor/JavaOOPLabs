@@ -133,11 +133,31 @@ public class Matrix {
     }
 
     public Matrix multiply(Matrix matrix) {
-        return null;
+        if (getColumnsN() != matrix.getRowsN()) {
+            throw new MatrixIncompatibleDimensionException();
+        }
+        double[][] result = new double[getRowsN()][matrix.getColumnsN()];
+        int elementsN = getColumnsN();
+        for (int rowI = 0; rowI < result.length; rowI++) {
+            for (int columnI = 0; columnI < result[0].length; columnI++) {
+                for (int i = 0; i < elementsN; i++) {
+                    result[rowI][columnI] += values[rowI][i] * matrix.values[i][columnI];
+                }
+            }
+        }
+        values = result;
+        return this;
     }
 
     public Matrix transpose() {
-        return null;
+        double[][] transposed = new double[getColumnsN()][getRowsN()];
+        for (int rowI = 0; rowI < getRowsN(); rowI++) {
+            for (int columnI = 0; columnI < getColumnsN(); columnI++) {
+                transposed[columnI][rowI] = values[rowI][columnI];
+            }
+        }
+        values = transposed;
+        return this;
     }
 
     public Matrix inverse() {
