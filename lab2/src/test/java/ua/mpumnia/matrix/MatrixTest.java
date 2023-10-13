@@ -2,7 +2,6 @@ package ua.mpumnia.matrix;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import ua.mpumnia.matrix.exceptions.MatrixIllegalDimensionException;
@@ -16,7 +15,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix();
         assertEquals(new Dimension(0, 0),
                 matrix.getDimension(),
-                () -> "Dimension mismatch");
+                "Dimension mismatch");
     }
 
     @Test
@@ -24,7 +23,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(3, 5);
         assertEquals(new Dimension(3, 5),
                 matrix.getDimension(),
-                () -> "Dimension mismatch");
+                "Dimension mismatch");
     }
 
     @Test
@@ -32,14 +31,14 @@ public class MatrixTest {
         Matrix matrix = new Matrix(new Dimension(3, 5));
         assertEquals(new Dimension(3, 5),
                 matrix.getDimension(),
-                () -> "Dimension mismatch");
+                "Dimension mismatch");
     }
 
     @Test
     void shouldThrowMatrixIllegalDimensionException() {
         assertThrows(MatrixIllegalDimensionException.class,
                 () -> new Matrix(-3, 5),
-                () -> "MatrixIllegalDimensionException wasn't thrown");
+                "MatrixIllegalDimensionException wasn't thrown");
     }
 
     @Test
@@ -47,7 +46,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         matrix.setValue(3, 2, 5);
         assertEquals(5, matrix.getValue(3, 2),
-                () -> "Set or get works incorrectly");
+                "Set or get works incorrectly");
     }
 
     @Test
@@ -55,7 +54,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         assertThrows(MatrixOutOfBoundsException.class,
                 () -> matrix.setValue(4, 0, 0),
-                () -> "MatrixOutOfBoundsException wasn't thrown");
+                "MatrixOutOfBoundsException wasn't thrown");
     }
 
     @Test
@@ -63,7 +62,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         assertThrows(MatrixOutOfBoundsException.class,
                 () -> matrix.getValue(0, 3),
-                () -> "MatrixOutOfBoundsException wasn't thrown");
+                "MatrixOutOfBoundsException wasn't thrown");
     }
 
     @Tag("setRowUsingArray")
@@ -82,7 +81,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         assertThrows(MatrixOutOfBoundsException.class,
                 () -> matrix.setRow(-1, 1, 2, 3),
-                () -> "MatrixOutOfBoundsException wasn't thrown");
+                "MatrixOutOfBoundsException wasn't thrown");
     }
 
     @Tag("setRowUsingArray")
@@ -91,7 +90,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         assertThrows(MatrixIncompatibleDimensionException.class,
                 () -> matrix.setRow(1, 1, 2, 3, 4),
-                () -> "MatrixIncompatibleDimensionException wasn't thrown");
+                "MatrixIncompatibleDimensionException wasn't thrown");
     }
 
     @Tag("setColumnUsingArray")
@@ -111,7 +110,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         assertThrows(MatrixOutOfBoundsException.class,
                 () -> matrix.setColumn(-1, 1, 2, 3, 4),
-                () -> "MatrixOutOfBoundsException wasn't thrown");
+                "MatrixOutOfBoundsException wasn't thrown");
     }
 
     @Tag("setColumnUsingArray")
@@ -120,7 +119,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         assertThrows(MatrixIncompatibleDimensionException.class,
                 () -> matrix.setColumn(1, 1, 2, 3),
-                () -> "MatrixIncompatibleDimensionException wasn't thrown");
+                "MatrixIncompatibleDimensionException wasn't thrown");
     }
 
     @Tag("setRowUsingRowMatrix")
@@ -144,7 +143,7 @@ public class MatrixTest {
         Matrix rowToSet = new Matrix(1, 3);
         assertThrows(MatrixOutOfBoundsException.class,
                 () -> matrix.setRow(-1, rowToSet),
-                () -> "MatrixOutOfBoundsException wasn't thrown");
+                "MatrixOutOfBoundsException wasn't thrown");
     }
 
     @Tag("setRowUsingRowMatrix")
@@ -154,7 +153,7 @@ public class MatrixTest {
         Matrix rowToSet = new Matrix(1, 4);
         assertThrows(MatrixIncompatibleDimensionException.class,
                 () -> matrix.setRow(1, rowToSet),
-                () -> "MatrixIncompatibleDimensionException wasn't thrown");
+                "MatrixIncompatibleDimensionException wasn't thrown");
     }
 
     @Tag("setColumnUsingColumnMatrix")
@@ -180,7 +179,7 @@ public class MatrixTest {
         Matrix columnToSet = new Matrix(4, 1);
         assertThrows(MatrixOutOfBoundsException.class,
                 () -> matrix.setColumn(-1, columnToSet),
-                () -> "MatrixOutOfBoundsException wasn't thrown");
+                "MatrixOutOfBoundsException wasn't thrown");
     }
 
     @Tag("setColumnUsingColumnMatrix")
@@ -190,7 +189,7 @@ public class MatrixTest {
         Matrix columnToSet = new Matrix(3, 1);
         assertThrows(MatrixIncompatibleDimensionException.class,
                 () -> matrix.setColumn(1, columnToSet),
-                () -> "MatrixIncompatibleDimensionException wasn't thrown");
+                "MatrixIncompatibleDimensionException wasn't thrown");
     }
 
     @Tag("getRow")
@@ -210,7 +209,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         assertThrows(MatrixOutOfBoundsException.class,
                 () -> matrix.getRow(5),
-                () -> "MatrixOutOfBoundsException wasn't thrown");
+                "MatrixOutOfBoundsException wasn't thrown");
     }
 
     @Tag("getColumn")
@@ -231,7 +230,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(4, 3);
         assertThrows(MatrixOutOfBoundsException.class,
                 () -> matrix.getColumn(3),
-                () -> "MatrixOutOfBoundsException wasn't thrown");
+                "MatrixOutOfBoundsException wasn't thrown");
     }
 
     @Test
@@ -241,7 +240,7 @@ public class MatrixTest {
         matrix.setRow(1, 6, 7, 8, 9, 1);
         matrix.setRow(2, 2, 3, 4, 5, 6);
         Matrix copy = new Matrix(matrix);
-        assertEquals(matrix, copy, () -> "Matrix wasn't copied");
+        assertEquals(matrix, copy, "Matrix wasn't copied");
     }
 
     @Test
@@ -255,12 +254,12 @@ public class MatrixTest {
         m2.setRow(1, 1, -4, 3);
         m2.setRow(2, -1, 4, 3);
         Matrix sum = m1.add(m2);
-        assertSame(sum, m1, () -> "Returned matrix is new object");
+        assertSame(sum, m1, "Returned matrix is new object");
         Matrix expected = new Matrix(3, 3);
         expected.setRow(0, 3, 8, 3);
         expected.setRow(1, 2, 1, 12);
         expected.setRow(2, 7, 7, 8);
-        assertEquals(expected, sum, () -> "Incorrect matrix sum");
+        assertEquals(expected, sum, "Incorrect matrix sum");
     }
 
     @Test
@@ -274,7 +273,7 @@ public class MatrixTest {
         m2.setRow(1, 1, -4, 3);
         assertThrows(MatrixIncompatibleDimensionException.class,
                 () -> m1.add(m2),
-                () -> "MatrixIncompatibleDimensionException wasn't thrown");
+                "MatrixIncompatibleDimensionException wasn't thrown");
 
     }
 
@@ -285,12 +284,12 @@ public class MatrixTest {
         m1.setRow(1, 1, 5, 9);
         m1.setRow(2, 8, 3, 5);
         Matrix scaled = m1.multiply(2);
-        assertSame(scaled, m1, () -> "Returned matrix is new object");
+        assertSame(scaled, m1, "Returned matrix is new object");
         Matrix expected = new Matrix(3, 3);
         expected.setRow(0, 4, 8, 12);
         expected.setRow(1, 2, 10, 18);
         expected.setRow(2, 16, 6, 10);
-        assertEquals(expected, scaled, () -> "Incorrect matrix scalar multiplication");
+        assertEquals(expected, scaled, "Incorrect matrix scalar multiplication");
     }
 
     @Test
@@ -301,12 +300,12 @@ public class MatrixTest {
         m1.setRow(2, 8, 3, 5);
         m1.setRow(3, 6, 2, 1);
         Matrix transposed = m1.transpose();
-        assertSame(transposed, m1, () -> "Returned matrix is new object");
+        assertSame(transposed, m1, "Returned matrix is new object");
         Matrix expected = new Matrix(3, 4);
         expected.setRow(0, 2, 1, 8, 6);
         expected.setRow(1, 4, 5, 3, 2);
         expected.setRow(2, 6, 9, 5, 1);
-        assertEquals(expected, transposed, () -> "Incorrect matrix transposition");
+        assertEquals(expected, transposed, "Incorrect matrix transposition");
     }
 
     @Test
@@ -319,12 +318,12 @@ public class MatrixTest {
         m2.setRow(0, 0, 0, 1, 1);
         m2.setRow(1, 1, 1, 0, 1);
         Matrix product = m1.multiply(m2);
-        assertSame(product, m1, () -> "Returned matrix is new object");
+        assertSame(product, m1, "Returned matrix is new object");
         Matrix expected = new Matrix(3, 4);
         expected.setRow(0, 1, 1, 1, 2);
         expected.setRow(1, 1, 1, 0, 1);
         expected.setRow(2, 0, 0, 1, 1);
-        assertEquals(expected, product, () -> "Incorrect matrix multiplication");
+        assertEquals(expected, product, "Incorrect matrix multiplication");
     }
 
 
@@ -340,7 +339,7 @@ public class MatrixTest {
         m2.setRow(2, 0, 1, 0);
         assertThrows(MatrixIncompatibleDimensionException.class,
                 () -> m1.multiply(m2),
-                () -> "MatrixIncompatibleDimensionException wasn't thrown");
+                "MatrixIncompatibleDimensionException wasn't thrown");
     }
 
 }
