@@ -234,4 +234,14 @@ public class MatrixTest {
                 () -> "MatrixOutOfBoundsException wasn't thrown");
     }
 
+    @Test
+    void testCopyConstructor() {
+        Matrix matrix = new Matrix(3, 5);
+        matrix.setRow(0, 1, 2, 3, 4, 5);
+        matrix.setRow(1, 6, 7, 8, 9, 1);
+        matrix.setRow(2, 2, 3, 4, 5, 6);
+        Matrix copy = new Matrix(matrix);
+        assertEquals(matrix, copy, () -> "Matrix wasn't copied");
+    }
+
 }

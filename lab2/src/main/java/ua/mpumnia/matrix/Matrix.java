@@ -4,6 +4,8 @@ import ua.mpumnia.matrix.exceptions.MatrixIllegalDimensionException;
 import ua.mpumnia.matrix.exceptions.MatrixIncompatibleDimensionException;
 import ua.mpumnia.matrix.exceptions.MatrixOutOfBoundsException;
 
+import java.util.Arrays;
+
 public class Matrix {
 
     private double[][] values;
@@ -27,7 +29,10 @@ public class Matrix {
     }
 
     public Matrix(Matrix matrix) {
-
+        this(matrix.getRowsN(), matrix.getColumnsN());
+        for (int rowI = 0; rowI < getRowsN(); rowI++) {
+            System.arraycopy(matrix.values[rowI], 0, values[rowI], 0, getColumnsN());
+        }
     }
 
     private int getRowsN() {
@@ -145,16 +150,19 @@ public class Matrix {
 
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Matrix matrix = (Matrix) o;
+        return Arrays.deepEquals(values, matrix.values);
     }
 
     @Override
     public int hashCode() {
-        return 0;
+        return Arrays.deepHashCode(values);
     }
 
     public String toString() {
-        return null;
+        return Arrays.deepToString(values).replace("],", "]\n");
     }
 
     private void checkOutOfBounds(int rowI, int columnI) {
