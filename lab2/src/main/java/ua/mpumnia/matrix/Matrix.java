@@ -2,6 +2,7 @@ package ua.mpumnia.matrix;
 
 import ua.mpumnia.matrix.exceptions.MatrixIllegalDimensionException;
 import ua.mpumnia.matrix.exceptions.MatrixIncompatibleDimensionException;
+import ua.mpumnia.matrix.exceptions.MatrixInverseException;
 import ua.mpumnia.matrix.exceptions.MatrixOutOfBoundsException;
 
 import java.util.Arrays;
@@ -161,7 +162,67 @@ public class Matrix {
     }
 
     public Matrix inverse() {
-        return null;
+        if (getRowsN() != getColumnsN()) {
+            throw new MatrixInverseException("Cannot take inverse of non-square matrix");
+        }
+
+        int dim = getRowsN();
+        double[][] result = new double[dim][dim];
+        double[][] buffer = new double[dim][dim];
+
+        // Prepare arrays
+        for (int i = 0; i < buffer.length; i++) {
+            result[i][i] = 1;
+            System.arraycopy(values[i], 0, buffer[i], 0, buffer[0].length);
+        }
+
+        // Make zeros under main diagonal
+        for (int j = 0; j < dim; j++) {
+            int nonZeroI = j;
+            while (nonZeroI < dim && buffer[nonZeroI][j] == 0) {
+                nonZeroI++;
+            }
+            if (nonZeroI == dim) {
+                throw new MatrixInverseException("Inverse matrix does not exist. Determinant is 0");
+            }
+
+            swapRows(buffer, nonZeroI, j);
+            swapRows(result, nonZeroI, j);
+
+            double scalar = buffer[j][j];
+            for (int j2 = 0; j2 < dim; j2++) {
+                result[j][j2] /= scalar;
+                buffer[j][j2] /= scalar;
+            }
+
+            for (int i = j+1; i < dim; i++) {
+                scalar = buffer[i][j];
+                for (int j2 = 0; j2 < dim; j2++) {
+                    result[i][j2] -= result[j][j2] * scalar;
+                    buffer[i][j2] -= buffer[j][j2] * scalar;
+                }
+            }
+        }
+
+        // Make zeros below main diagonal
+        for (int j = dim-1; j > 0; j--) {
+            for (int i = j-1; i >= 0; i--) {
+                double scalar = buffer[i][j];
+                for (int j2 = 0; j2 < dim; j2++) {
+                    result[i][j2] -= result[j][j2] * scalar;
+                    //buffer[i][j2] -= buffer[j][j2] * scalar;
+                }
+            }
+        }
+
+        values = result;
+        return this;
+    }
+
+    private void swapRows(double[][] array, int r1, int r2) {
+        double[] temp = array[r1];
+        array[r1] = array[r2];
+        array[r2] = temp;
     }
 
     public static Matrix createDiagonal(double... diagonal) {

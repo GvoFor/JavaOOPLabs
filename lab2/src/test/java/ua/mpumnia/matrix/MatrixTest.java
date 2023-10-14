@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import ua.mpumnia.matrix.exceptions.MatrixIllegalDimensionException;
 import ua.mpumnia.matrix.exceptions.MatrixIncompatibleDimensionException;
+import ua.mpumnia.matrix.exceptions.MatrixInverseException;
 import ua.mpumnia.matrix.exceptions.MatrixOutOfBoundsException;
 
 public class MatrixTest {
@@ -377,14 +378,12 @@ public class MatrixTest {
         assertNotEquals(notExpected, row, "Matrix isn't random");
     }
 
-
     @Test
     void testCreateRandomRowWithNegativeDimensionShouldThrowMatrixIllegalDimensionException() {
         assertThrows(MatrixIllegalDimensionException.class,
                 () -> Matrix.createRandomRow(-1),
                 "MatrixIllegalDimensionException wasn't thrown");
     }
-
 
     @Test
     void testCreateRandomColumn() {
@@ -394,12 +393,43 @@ public class MatrixTest {
         assertNotEquals(notExpected, column, "Matrix isn't random");
     }
 
-
     @Test
     void testCreateRandomColumnWithNegativeDimensionShouldThrowMatrixIllegalDimensionException() {
         assertThrows(MatrixIllegalDimensionException.class,
                 () -> Matrix.createRandomColumn(-1),
                 "MatrixIllegalDimensionException wasn't thrown");
+    }
+
+    @Test
+    void testInverse() {
+        Matrix matrix = new Matrix(3, 3);
+        matrix.setRow(0, 1, 0, 1);
+        matrix.setRow(1, 0, 1, 1);
+        matrix.setRow(2, 1, 1, 0);
+        Matrix expected = new Matrix(3, 3);
+        expected.setRow(0, 0.5, -0.5, 0.5);
+        expected.setRow(1, -0.5, 0.5, 0.5);
+        expected.setRow(2, 0.5, 0.5, -0.5);
+        assertEquals(expected, matrix.inverse(), "Incorrect inverse matrix");
+    }
+
+    @Test
+    void inverseOfNonSquareMatrixShouldThrowMatrixInverseException() {
+        Matrix matrix = new Matrix(4, 3);
+        assertThrows(MatrixInverseException.class,
+                matrix::inverse,
+                "MatrixInverseException wasn't thrown");
+    }
+
+    @Test
+    void inverseMatrixWithZeroDeterminantShouldThrowMatrixInverseException() {
+        Matrix matrix = new Matrix(3, 3);
+        matrix.setRow(0, 1, 2, 1);
+        matrix.setRow(1, 2, 4, 2);
+        matrix.setRow(2, 1, 1, 0);
+        assertThrows(MatrixInverseException.class,
+                matrix::inverse,
+                "MatrixInverseException wasn't thrown");
     }
 
 }
