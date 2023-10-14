@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class Matrix {
 
-    private double[][] values;
+    protected double[][] values;
 
     public Matrix() {
         this(0, 0);
@@ -271,8 +271,7 @@ public class Matrix {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Matrix matrix = (Matrix) o;
+        if (!(o instanceof Matrix matrix)) return false;
         return Arrays.deepEquals(values, matrix.values);
     }
 
