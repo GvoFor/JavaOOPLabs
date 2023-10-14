@@ -50,34 +50,34 @@ public class ImmutableMatrixTest {
         matrix.setRow(0, 0, 1, 0);
         matrix.setRow(1, 1, 0, 1);
         matrix.setRow(2, 0, 1, 0);
-        Matrix immutable = new ImmutableMatrix(Matrix.createIdentity(3, 3));
+        Matrix immutable = new ImmutableMatrix(Matrix.createIdentity(3));
         Matrix result = immutable.add(matrix);
         assertNotSame(result, immutable,
                 "Instance of immutable matrix was returned");
-        assertEquals(Matrix.createIdentity(3, 3), immutable,
+        assertEquals(Matrix.createIdentity(3), immutable,
                 "Immutable matrix was changed");
 
         Matrix expectedResult = new Matrix(3, 3);
-        expectedResult.setRow(0, 1, 2, 1);
-        expectedResult.setRow(1, 2, 1, 2);
-        expectedResult.setRow(2, 1, 2, 1);
+        expectedResult.setRow(0, 1, 1, 0);
+        expectedResult.setRow(1, 1, 1, 1);
+        expectedResult.setRow(2, 0, 1, 1);
         assertEquals(expectedResult, result,
                 "Addition is incorrect");
     }
 
     @Test
     void multiplyByScalarShouldReturnNewMatrixInstance() {
-        Matrix immutable = new ImmutableMatrix(Matrix.createIdentity(3, 3));
+        Matrix immutable = new ImmutableMatrix(Matrix.createIdentity(3));
         Matrix result = immutable.multiply(2.3);
         assertNotSame(result, immutable,
                 "Instance of immutable matrix was returned");
-        assertEquals(Matrix.createIdentity(3, 3), immutable,
+        assertEquals(Matrix.createIdentity(3), immutable,
                 "Immutable matrix was changed");
 
         Matrix expectedResult = new Matrix(3, 3);
-        expectedResult.setRow(0, 2.3, 2.3, 2.3);
-        expectedResult.setRow(1, 2.3, 2.3, 2.3);
-        expectedResult.setRow(2, 2.3, 2.3, 2.3);
+        expectedResult.setValue(0, 0, 2.3);
+        expectedResult.setValue(1, 1, 2.3);
+        expectedResult.setValue(2, 2, 2.3);
         assertEquals(expectedResult, result,
                 "Multiplication is incorrect");
     }

@@ -356,17 +356,19 @@ public class MatrixTest {
 
     @Test
     void testCreateIdentity() {
-        Matrix diagonal = Matrix.createIdentity(2, 4);
-        Matrix expected = new Matrix(2, 4);
-        expected.setRow(0, 1, 1, 1, 1);
-        expected.setRow(1, 1, 1, 1, 1);
-        assertEquals(expected, diagonal, "Incorrect identity matrix");
+        Matrix identity = Matrix.createIdentity(4);
+        Matrix expected = new Matrix(4, 4);
+        expected.setValue(0, 0, 1);
+        expected.setValue(1, 1, 1);
+        expected.setValue(2, 2, 1);
+        expected.setValue(3, 3, 1);
+        assertEquals(expected, identity, "Incorrect identity matrix");
     }
 
     @Test
     void testCreateIdentityWithNegativeDimensionShouldThrowMatrixIllegalDimensionException() {
         assertThrows(MatrixIllegalDimensionException.class,
-                () -> Matrix.createIdentity(-4, 3),
+                () -> Matrix.createIdentity(-4),
                 "MatrixIllegalDimensionException wasn't thrown");
     }
 

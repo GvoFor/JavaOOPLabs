@@ -233,15 +233,13 @@ public class Matrix {
         return result;
     }
 
-    public static Matrix createIdentity(int rowsN, int columnsN) {
-        if (rowsN < 0 || columnsN < 0) {
+    public static Matrix createIdentity(int rowsN) {
+        if (rowsN < 0) {
             throw new MatrixIllegalDimensionException();
         }
-        Matrix result = new Matrix(rowsN, columnsN);
+        Matrix result = new Matrix(rowsN, rowsN);
         for (int rowI = 0; rowI < rowsN; rowI++) {
-            for (int columnI = 0; columnI < columnsN; columnI++) {
-                result.values[rowI][columnI] = 1;
-            }
+            result.values[rowI][rowI] = 1;
         }
         return result;
     }
