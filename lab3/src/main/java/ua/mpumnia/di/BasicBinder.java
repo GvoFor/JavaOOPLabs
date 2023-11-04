@@ -2,7 +2,12 @@ package ua.mpumnia.di;
 
 import org.fpm.di.Binder;
 
-import java.util.Map;
+import javax.inject.Inject;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BasicBinder implements Binder {
 
@@ -16,6 +21,9 @@ public class BasicBinder implements Binder {
 
     @Override
     public <T> void bind(Class<T> clazz) {
+        if (clazz == null) {
+            throw new BindException("Binding null is not allowed");
+        }
         bind(clazz, clazz);
     }
 
@@ -26,6 +34,19 @@ public class BasicBinder implements Binder {
                     "Rebinding is not allowed: class %s was already bound"
                             .formatted(clazz));
         }
+
+        int implMod = implementation.getModifiers();
+        if (Modifier.isAbstract(implMod) || Modifier.isInterface(implMod)) {
+            throw new BindException("Implementation cannot be abstract");
+        }
+
+        int injectAnnotationsCount = findAllInjectConstructors(implementation).size();
+        if (injectAnnotationsCount > 1) {
+            throw new BindException("Implementation cannot have multiple constructor injection");
+        }
+
+        checkForCircularInjection(implementation);
+
         classesMap.put(clazz, implementation);
     }
 
@@ -37,5 +58,35 @@ public class BasicBinder implements Binder {
                             .formatted(clazz));
         }
         instancesMap.put(clazz, instance);
+    }
+
+    private List<Constructor<?>> findAllInjectConstructors(Class<?> clazz) {
+        return Arrays.stream(clazz.getDeclaredConstructors()).filter((constructor) ->
+                constructor.getAnnotation(Inject.class) != null).toList();
+    }
+
+    private Optional<Constructor<?>> findAnyInjectConstructor(Class<?> clazz) {
+        return Arrays.stream(clazz.getDeclaredConstructors()).filter((constructor) ->
+                constructor.getAnnotation(Inject.class) != null).findAny();
+    }
+
+    private void checkForCircularInjection(Class<?> clazz) {
+        Queue<Class<?>> toBeCheckedQueue = new ArrayDeque<>();
+        List<Class<?>> checked = new ArrayList<>();
+        toBeCheckedQueue.add(clazz);
+        while (!toBeCheckedQueue.isEmpty()) {
+            Class<?> toBeChecked = toBeCheckedQueue.poll();
+            Optional<Constructor<?>> constructorOpt =
+                    findAnyInjectConstructor(toBeChecked);
+            if (constructorOpt.isEmpty()) {
+                continue;
+            }
+            Constructor<?> constructor = constructorOpt.get();
+            Collections.addAll(toBeCheckedQueue, constructor.getParameterTypes());
+            checked.add(toBeChecked);
+            if (checked.stream().distinct().count() != checked.size()) {
+                throw new CircularInjectException("There is circular inject in class %s".formatted(clazz));
+            }
+        }
     }
 }

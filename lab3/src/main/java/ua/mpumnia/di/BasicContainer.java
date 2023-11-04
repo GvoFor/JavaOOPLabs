@@ -38,7 +38,7 @@ public class BasicContainer implements Container {
         } else {
             List<Class<? extends T>> implementations = getAllStoredImplementations(clazz);
             if (implementations.isEmpty()) {
-                throw new ContainerException("Unregistered class: %s".formatted(clazz));
+                throw new UnregisteredComponentException("Unregistered class: %s".formatted(clazz));
             }
 
             if (implementations.size() > 1) {
