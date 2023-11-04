@@ -4,6 +4,7 @@ import org.fpm.di.Container;
 import org.fpm.di.Environment;
 import org.junit.Before;
 import org.junit.Test;
+import ua.mpumnia.di.BasicEnvironment;
 
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
@@ -14,7 +15,7 @@ public class Example {
 
     @Before
     public void setUp() {
-        Environment env = new DummyEnvironment();
+        Environment env = new BasicEnvironment();
         container = env.configure(new MyConfiguration());
     }
 
